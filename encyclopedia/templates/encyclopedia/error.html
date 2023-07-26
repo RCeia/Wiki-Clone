@@ -1,9 +1,11 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Zikipedia: {{title}}
+    Entry not found: {{title}}
 {% endblock %}
 
 {% block body %}
-    {{entry|safe}}
+
+  <h1> Error: Entry "{{title}}" not found</h1>
+
 {% endblock %}
