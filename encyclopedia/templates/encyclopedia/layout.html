@@ -11,9 +11,9 @@
     <body>
         <div class="row">
             <div class="sidebar col-lg-2 col-md-3">
-                <h2>Wiki</h2>
+                <h2>Zikipedia</h2>
                 <form>
-                    <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
+                    {{ search_form }}
                 </form>
                 <div>
                     <a href="{% url 'index' %}">Home</a>
