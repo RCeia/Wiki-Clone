@@ -34,4 +34,16 @@ def entry(request, title):
           "title": title,
           "search_form": SearchForm(),
           })
+    
+def search(request):
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            entry = form.cleaned_data["search"]
+            title = entry
+    return render(request, "encyclopedia/search.html", {
+        "title": entry,
+        "entry": entry,
+        "search_form": SearchForm(),
+          })
 
