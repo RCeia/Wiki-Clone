@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django import forms
 from . import util
+from markdown2 import Markdown
 
 class SearchForm(forms.Form):
     # Form Class For Search Bar
@@ -13,4 +14,24 @@ def index(request):
         "entries": util.list_entries(),
         "search_form": SearchForm(),
     })
+
+def entry(request, title):
+    #Display Entry Pages
+
+    entries = util.get_entry(title)
+
+    if entries != None:
+        #If it exists, Display
+        entry = Markdown().convert(entries)
+        return render(request, "encyclopedia/entry.html", {
+          "title": title,
+          "entry": entry,
+          "search_form": SearchForm(),
+          })
+    else:
+        # If not, Display Error
+        return render(request, "encyclopedia/error.html", {
+          "title": title,
+          "search_form": SearchForm(),
+          })
 
