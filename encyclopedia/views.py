@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django import forms
 from . import util
 from markdown2 import Markdown
@@ -39,11 +40,12 @@ def search(request):
     if request.method == "POST":
         form = SearchForm(request.POST)
         if form.is_valid():
-            entry = form.cleaned_data["search"]
-            title = entry
+            title = form.cleaned_data["search"]
+            entries = util.get_entry(title)
+            if entries:
+                return redirect(reverse('entry', args=[title]))
     return render(request, "encyclopedia/search.html", {
-        "title": entry,
-        "entry": entry,
+        "title": title,
         "search_form": SearchForm(),
           })
 
