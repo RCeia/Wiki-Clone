@@ -13,9 +13,15 @@ h1 {
 }
 
 textarea {
-    height: 90vh;
+    height: 400px;
     width: 80%;
+    display: flex;
+    margin: 10px 0px 10px 0px;
 }
+
+input[type="submit"] {
+    display: flex;
+  }
 
 .main {
     padding: 10px;

@@ -10,6 +10,16 @@ class SearchForm(forms.Form):
       "class": "search",
       "placeholder": "Search Zikipedia"}))
 
+class NewForm(forms.Form):
+    # Form Class for New Entries
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={
+      "placeholder": "Entry Title"}))
+    text = forms.CharField(label='', widget=forms.Textarea(attrs={
+        "rows":80,
+        "cols":20,
+        "placeholder": "Enter Entry Content (You Can Use GitHub Markdown))"
+    }))
+
 def index(request):
     #Retrun Basic Index Page
     return render(request, "encyclopedia/index.html", {
@@ -61,4 +71,5 @@ def search(request):
 def new(request):
     return render(request, "encyclopedia/new.html", {
         "search_form": SearchForm(),
+        "new_form": NewForm(),
         })
