@@ -11,6 +11,7 @@ class SearchForm(forms.Form):
       "placeholder": "Search Zikipedia"}))
 
 def index(request):
+    #Retrun Basic Index Page
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
         "search_form": SearchForm(),
@@ -37,15 +38,23 @@ def entry(request, title):
           })
     
 def search(request):
+    #Get Form
     if request.method == "POST":
         form = SearchForm(request.POST)
+        #Check If Form is valid
         if form.is_valid():
             title = form.cleaned_data["search"]
             entries = util.get_entry(title)
+            #Return Exact Search
             if entries:
                 return redirect(reverse('entry', args=[title]))
-    return render(request, "encyclopedia/search.html", {
-        "title": title,
-        "search_form": SearchForm(),
-          })
+            #Return Search Results
+            else:
+                related = util.related(title)
+
+                return render(request, "encyclopedia/search.html", {
+                "related": related,
+                "title": title,
+                "search_form": SearchForm(),
+                })
 
