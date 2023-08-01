@@ -58,3 +58,7 @@ def search(request):
                 "search_form": SearchForm(),
                 })
 
+def new(request):
+    return render(request, "encyclopedia/new.html", {
+        "search_form": SearchForm(),
+        })

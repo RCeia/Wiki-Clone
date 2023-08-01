@@ -1,0 +1,17 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Create New Ziki Page
+{% endblock %}
+
+{% block body %}
+
+  <h1>Create a new Zikipedia Page:</h1>
+
+  <form action="{% url 'new' %}" method="post">
+    {% csrf_token %}
+    {{ new_form }}
+    <input type="submit" value="Submit">
+  </form>
+
+{% endblock %}
