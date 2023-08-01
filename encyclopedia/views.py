@@ -1,22 +1,21 @@
+from django import forms
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django import forms
+from django.contrib import messages
 from . import util
 from markdown2 import Markdown
 
 class SearchForm(forms.Form):
     # Form Class For Search Bar
-    search = forms.CharField(label='', widget=forms.TextInput(attrs={
+    search = forms.CharField(label="", widget=forms.TextInput(attrs={
       "class": "search",
       "placeholder": "Search Zikipedia"}))
 
 class NewForm(forms.Form):
     # Form Class for New Entries
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={
+    title = forms.CharField(label="", widget=forms.TextInput(attrs={
       "placeholder": "Entry Title"}))
-    text = forms.CharField(label='', widget=forms.Textarea(attrs={
-        "rows":80,
-        "cols":20,
+    text = forms.CharField(label="", widget=forms.Textarea(attrs={
         "placeholder": "Enter Entry Content (You Can Use GitHub Markdown))"
     }))
 
@@ -57,7 +56,7 @@ def search(request):
             entries = util.get_entry(title)
             #Return Exact Search
             if entries:
-                return redirect(reverse('entry', args=[title]))
+                return redirect(reverse("entry", args=[title]))
             #Return Search Results
             else:
                 related = util.related(title)
@@ -69,7 +68,38 @@ def search(request):
                 })
 
 def new(request):
-    return render(request, "encyclopedia/new.html", {
-        "search_form": SearchForm(),
-        "new_form": NewForm(),
+    # New Zikipedia Entry
+    # Handles Basic GET Request
+    if request.method == "GET":
+        return render(request, "encyclopedia/new.html", {
+          "new_form": NewForm(),
+          "search_form": SearchForm(),
         })
+
+    # Handles POST Request
+    elif request.method == "POST":
+        form = NewForm(request.POST)
+
+        # Form Process and Validation
+        if form.is_valid():
+          title = form.cleaned_data["title"]
+          text = form.cleaned_data["text"]
+        else:
+          messages.error(request, "Form is not valid, Try doing it Again!")
+          return render(request, "encyclopedia/new.html", {
+            "new_form": form,
+            "search_form": SearchForm()
+          })
+
+        # Check If Entry Already Exists 
+        if util.get_entry(title):
+            messages.error(request, "The Entry You Are Trying To Create Already Exists, You Can Edit It Instead!")
+            return render(request, "encyclopedia/new.html", {
+              "new_form": form,
+              "search_form": SearchForm(),
+            })
+        # If not, Create a new one!
+        else:
+            util.save_entry(title, text),
+            messages.success(request, f'New Entry "{title}" Has Been Submited!')
+            return redirect(reverse("entry", args=[title]))
