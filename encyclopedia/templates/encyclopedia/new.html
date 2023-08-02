@@ -5,7 +5,24 @@
 {% endblock %}
 
 {% block body %}
-
+  {% if messages %}
+    {% for msg in messages %}
+      <!-- Warning Messages-->
+      {% if msg.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ msg.message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+      <!-- Success Messages -->
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ msg.message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
   <h1>Create a new Zikipedia Page:</h1>
 
   <form action="{% url 'new' %}" method="post">
@@ -13,5 +30,4 @@
     {{ new_form }}
     <input type="submit" value="Save New Page">
   </form>
-
 {% endblock %}

@@ -75,7 +75,6 @@ def new(request):
           "new_form": NewForm(),
           "search_form": SearchForm(),
         })
-
     # Handles POST Request
     elif request.method == "POST":
         form = NewForm(request.POST)
@@ -85,21 +84,15 @@ def new(request):
           title = form.cleaned_data["title"]
           text = form.cleaned_data["text"]
         else:
-          messages.error(request, "Form is not valid, Try doing it Again!")
-          return render(request, "encyclopedia/new.html", {
-            "new_form": form,
-            "search_form": SearchForm()
-          })
-
+          messages.error(request, "Form is not Valid, Try Doing it Again!")
         # Check If Entry Already Exists 
         if util.get_entry(title):
             messages.error(request, "The Entry You Are Trying To Create Already Exists, You Can Edit It Instead!")
-            return render(request, "encyclopedia/new.html", {
-              "new_form": form,
-              "search_form": SearchForm(),
-            })
         # If not, Create a new one!
         else:
             util.save_entry(title, text),
             messages.success(request, f'New Entry "{title}" Has Been Submited!')
-            return redirect(reverse("entry", args=[title]))
+        return render(request, "encyclopedia/new.html", {
+          "new_form": form,
+          "search_form": SearchForm(),
+        })
