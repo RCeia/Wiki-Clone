@@ -96,3 +96,11 @@ def new(request):
           "new_form": form,
           "search_form": SearchForm(),
         })
+    
+
+def edit(request, title):
+  
+  return render(request, "encyclopedia/edit.html", {
+  "title": title,
+  "search_form": SearchForm(),
+  })
